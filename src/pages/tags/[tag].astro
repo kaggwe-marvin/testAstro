@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogPost from "../../components/BlogPost.astro";
 
+// Function to retrieve static paths
 export async function getStaticPaths() {
   const allPosts = await Astro.glob("../posts/*.md");
 
@@ -9,6 +10,7 @@ export async function getStaticPaths() {
     ...new Set(allPosts.map((post) => post.frontmatter.tags).flat()),
   ];
 
+  // Map unique tags to create paths and props for each tag
   return uniqueTags.map((tag) => {
     const filteredPosts = allPosts.filter((post) =>
       post.frontmatter.tags.includes(tag)
@@ -20,6 +22,7 @@ export async function getStaticPaths() {
   });
 }
 
+// Retrieve tag and posts from Astro object
 const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
@@ -28,6 +31,7 @@ const { posts } = Astro.props;
   <p>Posts tagged with {tag}</p>
   <ul>
     {
+      // Iterate over the posts and render BlogPost component for each
       posts.map((post) => (
         <BlogPost url={post.url} title={post.frontmatter.title} />
       ))
